@@ -1,17 +1,9 @@
 import {useState, type ReactNode} from 'react';
-import {BadgeCheck, Check, Copy, Ticket} from 'lucide-react';
+import {Check, Copy, KeyRound, Ticket} from 'lucide-react';
 import {AppHeader, type AppRoute} from '../components/AppHeader';
 import {BrandName} from '../components/BrandName';
 import {useToast} from '../components/ToastProvider';
-import {
-  ADMIN_SECRET_ID,
-  BRAND_NAME,
-  CRASH_ICON_SRC,
-  DEPOSIT_OPTIONS,
-  EMBLEM_SRC,
-  PROMO_CODE,
-} from '../lib/platform';
-import {grantAdminAccess, saveSession} from '../lib/session';
+import {BRAND_NAME, DEPOSIT_OPTIONS, EMBLEM_SRC, PROMO_CODE} from '../lib/platform';
 
 interface TermsPageProps {
   onNavigate: (to: AppRoute) => void;
@@ -50,11 +42,7 @@ function StepCard({index, badge, title, description, children}: StepCardProps) {
 export function TermsPage({onNavigate}: TermsPageProps) {
   const toast = useToast();
   const [copied, setCopied] = useState(false);
-  const [accountId, setAccountId] = useState('');
   const [emblemError, setEmblemError] = useState(false);
-
-  const digitsOnly = accountId.replace(/\D/g, '');
-  const isValidId = digitsOnly.length >= 8 && digitsOnly.length <= 14;
 
   const handleCopyPromo = async () => {
     try {
@@ -65,24 +53,6 @@ export function TermsPage({onNavigate}: TermsPageProps) {
     } catch {
       toast.error('تعذّر نسخ الكود');
     }
-  };
-
-  const handleIdChange = (value: string) => {
-    setAccountId(value);
-    if (value.trim() === ADMIN_SECRET_ID) {
-      grantAdminAccess();
-      toast.success('مرحبًا بك في لوحة التحكم');
-      onNavigate('/admin');
-    }
-  };
-
-  const handleEnterPredictions = () => {
-    if (!isValidId) {
-      toast.error('الـ ID يجب أن يكون من 8 إلى 14 رقم');
-      return;
-    }
-    saveSession({code: digitsOnly, expiresAt: null});
-    onNavigate('/crash');
   };
 
   return (
@@ -116,7 +86,9 @@ export function TermsPage({onNavigate}: TermsPageProps) {
           <h1 className="mt-3 font-display text-2xl font-extrabold leading-tight text-foreground">
             أكمل الشروط لتفعيل عضويتك
           </h1>
-          <p className="mt-2 text-xs text-muted-foreground">ثلاث خطوات بسيطة — أقل من دقيقتين</p>
+          <p className="mt-2 text-xs text-muted-foreground">
+            خطوتان بسيطتان قبل استخراج كود التفعيل
+          </p>
         </section>
 
         <ol className="mt-8 space-y-4">
@@ -176,54 +148,15 @@ export function TermsPage({onNavigate}: TermsPageProps) {
               ))}
             </div>
           </StepCard>
-
-          <StepCard
-            index={3}
-            badge="VERIFY"
-            title="إدخال الـ ID وتأكيد اللعبة"
-            description={`أدخل رقم حسابك في ${BRAND_NAME} للدخول إلى توقعات الطيارة.`}
-          >
-            <div className="flex items-center gap-3 rounded-xl border border-input bg-secondary/40 px-4 focus-within:border-primary focus-within:ring-2 focus-within:ring-ring">
-              <BadgeCheck className="size-4 shrink-0 text-primary" />
-              <input
-                value={accountId}
-                onChange={(e) => handleIdChange(e.target.value)}
-                placeholder="اكتب ID الحساب"
-                inputMode="numeric"
-                className="h-12 w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
-              />
-              {isValidId ? <Check className="size-4 shrink-0 text-primary" /> : null}
-            </div>
-
-            {isValidId ? (
-              <div className="animate-rise mt-4">
-                <div className="flex items-center gap-3 overflow-hidden rounded-xl border border-primary bg-primary/10 p-2 ring-2 ring-primary/50">
-                  <img
-                    src={CRASH_ICON_SRC}
-                    alt="Crash"
-                    loading="lazy"
-                    width={96}
-                    height={96}
-                    referrerPolicy="no-referrer"
-                    className="size-16 shrink-0 rounded-lg object-cover"
-                  />
-                  <div className="min-w-0 flex-1 text-right">
-                    <p className="font-display text-sm font-extrabold text-foreground">Crash</p>
-                    <p className="text-[11px] text-primary">لعبة الطيارة مفعّلة</p>
-                  </div>
-                  <Check className="size-4 shrink-0 text-primary" />
-                </div>
-              </div>
-            ) : null}
-          </StepCard>
         </ol>
 
         <button
           type="button"
-          onClick={handleEnterPredictions}
-          className="bg-gold mt-8 h-14 w-full rounded-xl font-display text-base font-extrabold text-primary-foreground shadow-lg transition-transform active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          onClick={() => onNavigate('/get-code')}
+          className="bg-gold mt-8 flex h-14 w-full items-center justify-center gap-2 rounded-xl font-display text-base font-extrabold text-primary-foreground shadow-lg transition-transform active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          الدخول للتوقعات
+          <KeyRound className="size-4" />
+          خد الكود عن طريق الخطوات
         </button>
 
         <p className="mt-5 text-center text-[11px] leading-relaxed text-muted-foreground">

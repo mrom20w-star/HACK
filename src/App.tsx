@@ -8,6 +8,7 @@ import type {AppRoute} from './components/AppHeader';
 import {ToastProvider} from './components/ToastProvider';
 import {AdminPage} from './pages/AdminPage';
 import {CrashPage} from './pages/CrashPage';
+import {GetCodePage} from './pages/GetCodePage';
 import {SplashPage} from './pages/SplashPage';
 import {TermsPage} from './pages/TermsPage';
 
@@ -15,6 +16,7 @@ function parseRoute(pathname: string): AppRoute {
   if (pathname === '/terms') return '/terms';
   if (pathname === '/crash') return '/crash';
   if (pathname === '/admin') return '/admin';
+  if (pathname === '/get-code') return '/get-code';
   return '/';
 }
 
@@ -43,6 +45,7 @@ export default function App() {
     <ToastProvider>
       {route === '/' && <SplashPage onNavigate={navigate} />}
       {route === '/terms' && <TermsPage onNavigate={navigate} />}
+      {route === '/get-code' && <GetCodePage onNavigate={navigate} />}
       {route === '/crash' && <CrashPage onNavigate={navigate} />}
       {route === '/admin' && <AdminPage onNavigate={navigate} />}
     </ToastProvider>

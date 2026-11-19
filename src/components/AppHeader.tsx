@@ -1,7 +1,7 @@
 import {ArrowLeft} from 'lucide-react';
 import {BrandName} from './BrandName';
 
-export type AppRoute = '/' | '/terms' | '/crash' | '/admin';
+export type AppRoute = '/' | '/terms' | '/crash' | '/admin' | '/get-code';
 
 interface AppHeaderProps {
   backTo?: AppRoute;
