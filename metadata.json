@@ -1,0 +1,6 @@
+{
+  "name": "اسكربت ايران — نادي التوقعات الحصري",
+  "description": "اسكربت ايران تطبيق حصري للأعضاء بثيم أسود وأحمر: خطوات تفعيل بسيطة وتجربة أنيقة.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
